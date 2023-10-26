@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 'style files.
 Usage:
-  style_files [--style_pkg=<style_guide_pkg>] [--style_fun=<style_guide_fun>] [--cache-root=<cache_root_>] [--no-warn-cache] [--ignore-start=<ignore_start_>] [--ignore-stop=<ignore_stop_>] <files>...
+  style_files [--style_pkg=<style_guide_pkg>] [--style_fun=<style_guide_fun>] [--cache-root=<cache_root_>] [--no-warn-cache] [--ignore-start=<ignore_start_>] [--ignore-stop=<ignore_stop_>] [--addins_style_transformer=<addins_style_transformer>] <files>...
 
 Options:
   --style_pkg=<style_guide_pkg>  Package where the style guide is stored [default: styler].
@@ -10,6 +10,7 @@ Options:
   --cache-root=<cache_root_> Passed to `options("styler.cache_root")` [default: styler-perm].
   --ignore-start=<ignore_start_> Passed to `options("styler.ignore_start")`.
   --ignore-stop=<ignore_stop_> Passed to `options("styler.ignore_stop")`.
+  --addins_style_transformer=<addins_style_transformer> Passed to `options("styler.addins_style_transformer")`
 ' -> doc
 
 if (packageVersion("precommit") < "0.1.3.9010") {
@@ -28,7 +29,7 @@ args <- commandArgs(trailingOnly = TRUE)
 non_file_args <- args[!grepl("^[^-][^-]", args)]
 keys <- setdiff(
   gsub("(^--[0-9A-Za-z_-]+).*", "\\1", non_file_args),
-  c("--style_pkg", "--style_fun", "--cache-root", "--no-warn-cache", "--ignore-start", "--ignore-stop")
+  c("--style_pkg", "--style_fun", "--cache-root", "--no-warn-cache", "--ignore-start", "--ignore-stop", "--addins_style_transformer")
 )
 if (length(keys) > 0) {
   bare_keys <- gsub("^--", "", keys)
@@ -54,6 +55,9 @@ if (!is.null(arguments$ignore_start)) {
 }
 if (!is.null(arguments$ignore_stop)) {
   options("styler.ignore_stop" = arguments$ignore_stop)
+}
+if (!is.null(arguments$addins_style_transformer)) {
+  options("styler.addins_style_transformer" = arguments$addins_style_transformer)
 }
 print(c("cache root set to ", arguments$cache_root))
 if (!rlang::is_installed(arguments$style_pkg)) {
