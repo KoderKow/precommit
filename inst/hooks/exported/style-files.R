@@ -49,17 +49,25 @@ if (packageVersion("styler") < "1.3.2") {
 } else {
   precommit::may_require_permanent_cache(arguments$no_warn_cache)
 }
+
 options("styler.cache_root" = arguments$cache_root)
+cat(paste("- cache_root set to", arguments$cache_root))
+
 if (!is.null(arguments$ignore_start)) {
   options("styler.ignore_start" = arguments$ignore_start)
+  cat(paste("- ignore_start root set to", arguments$ignore_start))
 }
+
 if (!is.null(arguments$ignore_stop)) {
   options("styler.ignore_stop" = arguments$ignore_stop)
+  cat(paste("- ignore_stop set to", arguments$ignore_stop))
 }
+
 if (!is.null(arguments$addins_style_transformer)) {
   options("styler.addins_style_transformer" = arguments$addins_style_transformer)
+  cat(paste("- addins_style_transformer set to", arguments$addins_style_transformer))
 }
-print(c("cache root set to ", arguments$cache_root))
+
 if (!rlang::is_installed(arguments$style_pkg)) {
   rlang::abort(paste0(
     "{", arguments$style_pkg,
